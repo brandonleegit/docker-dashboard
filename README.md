@@ -45,3 +45,6 @@ services:
     volumes:
       - ./data:/var/www/html
 ```
+## Known issues
+
+See the Wiki page for known issues.
