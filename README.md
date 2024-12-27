@@ -9,7 +9,12 @@ Please check out my full blog post on the tool here and what each file does: htt
 The steps include
 - Make sure you have a SSH keypair created and you can connect to your Docker hosts using this
 - Create the files that are needed that are shown in the repo (you can clone the repo and just add your SSH key)
+- Run the docker build command
 - Run the docker run or docker compose command
+
+```
+docker build -t docker-dashboard .
+```
 
 ## Docker run and Compose commands:
 
@@ -40,3 +45,6 @@ services:
     volumes:
       - ./data:/var/www/html
 ```
+## Known issues
+
+See the Wiki page for known issues.
