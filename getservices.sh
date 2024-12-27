@@ -4,7 +4,7 @@
 IFS=',' read -ra DOCKER_HOSTS <<< "$DOCKER_HOSTS"
 SSH_KEY="~/.ssh/id_rsa" # Path to your SSH private key
 OUTPUT_FILE="/var/www/html/docker_containers.html"
-TEMP_FILE="/var/www/html/docker_containers_temp.html"
+TEMP_FILE="/tmp/docker_containers_temp.html"
 
 # Initialize counters
 TOTAL_HOSTS=0
