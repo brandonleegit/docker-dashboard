@@ -23,82 +23,107 @@ cat > "$TEMP_FILE" <<EOF
     <title>Docker Containers Dashboard</title>
     <style>
         :root {
-            --bg-color: #121212;
+            --bg-color: #1a1a2e;
             --text-color: #ffffff;
-            --table-bg-color: #1e1e1e;
-            --table-border-color: #333;
-            --input-bg-color: #333;
-            --input-border-color: #555;
-            --log-text-color: #000000;
+            --highlight-color: #e94560;
+            --card-bg-color: #16213e;
+            --table-border-color: #2e2e4d;
+            --input-bg-color: #22254b;
+            --input-border-color: #444766;
+            --log-text-color: #e94560;
         }
 
         [data-theme="light"] {
-            --bg-color: #ffffff;
-            --text-color: #000000;
-            --table-bg-color: #f2f2f2;
-            --table-border-color: #ddd;
+            --bg-color: #f4f4f9;
+            --text-color: #1a1a2e;
+            --highlight-color: #1a1a2e;
+            --card-bg-color: #ffffff;
+            --table-border-color: #dcdce1;
             --input-bg-color: #ffffff;
-            --input-border-color: #ddd;
-            --log-text-color: #000000;
+            --input-border-color: #ccc;
+            --log-text-color: #1a1a2e;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 20px;
             background-color: var(--bg-color);
             color: var(--text-color);
         }
 
+        h1 {
+            text-align: center;
+            color: var(--highlight-color);
+        }
+
+        .summary {
+            text-align: center;
+            margin-bottom: 20px;
+            background-color: var(--card-bg-color);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
-            table-layout: fixed;
+            table-layout: fixed; /* Default fixed layout */
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         th, td {
             border: 1px solid var(--table-border-color);
-            padding: 8px;
+            padding: 12px;
             text-align: left;
-            word-wrap: break-word;
-            white-space: pre-wrap;
+            white-space: pre-wrap; /* Wrap text by default */
+            word-wrap: break-word; /* Ensure long strings wrap */
         }
 
         th {
-            background-color: var(--table-bg-color);
+            background-color: var(--highlight-color);
+            color: #fff;
             cursor: pointer;
-            position: relative;
         }
 
         th.sorted-asc::after {
             content: "▲";
             font-size: 12px;
             margin-left: 8px;
-            color: var(--text-color);
+            color: #fff;
         }
 
         th.sorted-desc::after {
             content: "▼";
             font-size: 12px;
             margin-left: 8px;
+            color: #fff;
+        }
+
+        td {
             color: var(--text-color);
         }
 
-        #searchInput {
-            margin-bottom: 10px;
-            padding: 8px;
-            width: 100%;
+        #searchInput, #darkModeToggle {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 90%;
+            max-width: 400px;
             border: 1px solid var(--input-border-color);
+            border-radius: 5px;
             background-color: var(--input-bg-color);
             color: var(--text-color);
         }
 
         #darkModeToggle {
-            margin-bottom: 10px;
-            padding: 8px;
+            background-color: var(--highlight-color);
+            color: #fff;
             cursor: pointer;
-            background-color: var(--table-bg-color);
-            border: 1px solid var(--table-border-color);
-            color: var(--text-color);
+            text-align: center;
         }
 
         .log-toggle {
@@ -111,8 +136,22 @@ cat > "$TEMP_FILE" <<EOF
             white-space: pre-wrap;
             margin-top: 5px;
             padding: 8px;
-            background-color: var(--table-bg-color);
+            background-color: var(--card-bg-color);
             border: 1px solid var(--table-border-color);
+        }
+
+        @media (max-width: 768px) {
+            table {
+                table-layout: auto; /* Allow horizontal scrolling */
+            }
+
+            th, td {
+                white-space: nowrap; /* Prevent wrapping on smaller screens */
+            }
+
+            #searchInput, #darkModeToggle {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -120,13 +159,13 @@ cat > "$TEMP_FILE" <<EOF
     <h1>Docker Containers Dashboard</h1>
     <div class="summary" id="summary">
         <p>
-            <span>Total Docker Hosts: <span id="totalHosts">0</span></span>, 
-            <span>Total Containers: <span id="totalContainers">0</span></span>
+            <strong>Total Docker Hosts:</strong> <span id="totalHosts">0</span>, 
+            <strong>Total Containers:</strong> <span id="totalContainers">0</span>
         </p>
-        <p>Snapshot Time: <span id="snapshotTime">${SNAPSHOT_TIME}</span></p>
+        <p><strong>Snapshot Time:</strong> <span id="snapshotTime">${SNAPSHOT_TIME}</span></p>
     </div>
-    <button id="darkModeToggle">Toggle Light Mode</button>
     <input type="text" id="searchInput" placeholder="Search for Docker Host, Container, Image, or Ports..." />
+    <button id="darkModeToggle">Toggle Light Mode</button>
     <table id="dockerTable">
         <thead>
             <tr>
@@ -145,6 +184,7 @@ cat > "$TEMP_FILE" <<EOF
         </thead>
         <tbody>
 EOF
+
 
 # Loop through Docker hosts and gather information
 for HOST in "${DOCKER_HOSTS[@]}"; do
