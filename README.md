@@ -1,5 +1,8 @@
 # docker-dashboard
 
+![Alt text](https://github.com/brandonleegit/docker-dashboard/raw/main/dockerdashboard.jpg)
+
+
 ## Architecture
 This Docker Dashboard is comprised of all free and open source software and allows you to build your own container image to your liking. I have chosen to use an Alpine Linux container for housing a bash script that scrapes data from my docker hosts and then displays the data in an HTML table. You can then host this on a docker container host itself to have access to the simple web interface to see your containers.
 
