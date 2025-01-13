@@ -180,6 +180,8 @@ cat > "$TEMP_FILE" <<EOF
                 <th class="sortable">Restart Count</th>
                 <th class="sortable">Volumes</th>
                 <th class="sortable">Uptime</th>
+                <th class="sortable">Disk Usage</th>
+                <th class="sortable">Available Upgrades</th>
             </tr>
         </thead>
         <tbody>
@@ -202,6 +204,11 @@ for HOST in "${DOCKER_HOSTS[@]}"; do
 
     HOSTNAME=$(echo "$HOST" | awk -F@ '{print $2}')
     CONTAINER_COUNT=0
+
+    # Fetch disk usage and available upgrades
+    DISK_USAGE=$($SSH_CMD "df | grep '/$' | awk '{print \$5}'" 2>/dev/null || echo "N/A")
+    AVAILABLE_UPGRADES=$($SSH_CMD "apt list --upgradable 2>/dev/null | wc -l" 2>/dev/null || echo "N/A")
+
 
     for CONTAINER_ID in $CONTAINER_IDS; do
         CONTAINER_NAME=$($SSH_CMD "docker inspect --format='{{.Name}}' $CONTAINER_ID" | sed 's|/||')
@@ -237,6 +244,8 @@ for HOST in "${DOCKER_HOSTS[@]}"; do
             <td>${RESTART_COUNT:-0}</td>
             <td>${VOLUMES:-None}</td>
             <td>${UPTIME}</td>
+            <td>${DISK_USAGE}</td>
+            <td>${AVAILABLE_UPGRADES}</td>
         </tr>" >> "$TEMP_FILE"
 
         CONTAINER_COUNT=$((CONTAINER_COUNT + 1))
