@@ -1,0 +1,60 @@
+# Ignore private keys and sensitive data
+id_rsa
+id_rsa.pub
+*.pem
+*.key
+*.crt
+
+# Ignore environment variable files
+.env
+
+# Ignore log files and temporary files
+*.log
+*.tmp
+*.swp
+
+# Ignore Docker build artifacts
+Dockerfile~
+docker-compose.override.yml
+docker-compose.override.yaml
+.dockerignore
+
+# Ignore node_modules (if you're using Node.js for additional functionality)
+node_modules/
+
+# Ignore Python virtual environment (if applicable)
+venv/
+__pycache__/
+*.py[cod]
+
+# Ignore compiled code and binaries
+*.out
+*.o
+*.so
+*.class
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore IDE configuration files
+.vscode/
+.idea/
+*.iml
+
+# Ignore temporary editor files
+*.swp
+*~
+*.bak
+*.tmp
+
+# Do not ignore HTML files
+!*.html
+
+# Do not ignore essential configuration and scripts
+!nginx.conf
+!getservices.sh
+
+# Ignore SSH configuration (if stored locally for testing)
+.ssh/
